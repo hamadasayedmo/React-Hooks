@@ -34,6 +34,16 @@ function App() {
       >
         +
       </button>
+      <br />
+      <button
+        onClick={() => {
+          {
+            setNumber(0);
+          }
+        }}
+      >
+        Reset
+      </button>
 
       {/* Change Age */}
       <h4>My Age Is {age}</h4>
