@@ -1,33 +1,63 @@
 import "./App.css";
-import { useState } from "react";
+import { useReducer } from "react";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE_NAME":
+      return { ...state, name: action.newValue };
+
+    case "CHANGE_AGE":
+      return { ...state, age: action.newAge };
+
+    case "CHANGE_COUNT":
+      return { ...state, count: action.numCount };
+
+    case "CHANGE_THEMES":
+      return { ...state, theme: action.newValue };
+
+    default:
+      return state;
+  }
+};
+
+const initialData = {
+  name: "Hamada",
+  age: 18,
+  theme: "light",
+  count: 0,
+};
 
 function App() {
-  // State variables
-  const [name, setName] = useState("Hamada");
-  const [number, setNumber] = useState(0);
-  const [age, setAge] = useState(18);
-  const [theme, setTheme] = useState("light"); // Default theme
-
-  // Function to change theme
-  const changeTheme = (newTheme) => {
-    setTheme(newTheme);
-  };
+  // use Reducer
+  const [allData, dispatch] = useReducer(reducer, initialData);
 
   return (
-    <div className={`App ${theme}`}>
+    <div className={`App ${allData.theme}`}>
       {/* Toggle Dark Mode */}
       <button
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        onClick={() =>
+          dispatch({
+            type: "CHANGE_THEMES",
+            newValue: allData.theme === "light" ? "dark" : "light",
+          })
+        }
         style={{ marginBottom: "20px" }}
       >
         Toggle Dark Mode
       </button>
 
+
       {/* Toggle Switch */}
-      <div 
+      <div
         className="btn-container"
         style={{ marginBottom: "20px" }}
-        onChange={() => {setTheme(theme === 'light' ? 'dark' : 'light')}}>
+        onChange={() =>
+          dispatch({
+            type: "CHANGE_THEMES",
+            newValue: allData.theme === "light" ? "dark" : "light",
+          })
+        }
+      >
         <i className="fa fa-sun-o" aria-hidden="true" />
         <label className="switch btn-color-mode-switch">
           <input
@@ -50,51 +80,82 @@ function App() {
       {/* Theme Buttons */}
       <div style={{ marginBottom: "20px" }}>
         <button
-          onClick={() => changeTheme("light")}
-          style={{ marginRight: "10px" }}
+          onClick={() => {
+            dispatch({ type: "CHANGE_THEMES", newValue: "light" });
+          }}
+          style={{ marginRight: "26px" }}
         >
           Light
         </button>
         <button
-          onClick={() => changeTheme("dark")}
-          style={{ marginRight: "10px" }}
+          onClick={() => {
+            dispatch({ type: "CHANGE_THEMES", newValue: "dark" });
+          }}
+          style={{ marginRight: "26px" }}
         >
           Dark
         </button>
         <button
-          onClick={() => changeTheme("pink")}
-          style={{ marginRight: "10px" }}
-        >
-          Pink
-        </button>
-        <button
-          onClick={() => changeTheme("yellow")}
-          style={{ marginRight: "10px" }}
+          onClick={() => {
+            dispatch({ type: "CHANGE_THEMES", newValue: "yellow" });
+          }}
+          style={{ marginRight: "26px" }}
         >
           Yellow
         </button>
+        <button
+          onClick={() => {
+            dispatch({ type: "CHANGE_THEMES", newValue: "pink" });
+          }}
+        >
+          Pink
+        </button>
       </div>
+
 
       {/* Change Name */}
       <div style={{ marginBottom: "20px" }}>
-        <h4>My Name Is {name}</h4>
-        <button onClick={() => setName("Mede")}>Change Name</button>
+        <h4>My Name Is {allData.name}</h4>
+        <button
+          onClick={() => dispatch({ type: "CHANGE_NAME", newValue: "Medo" })}
+        >
+          Change Name
+        </button>
       </div>
+
 
       {/* Counter */}
       <div style={{ marginBottom: "20px" }}>
-        <h4>Number: {number}</h4>
-        <button onClick={() => setNumber(number - 1)}>-</button>
-        <button onClick={() => setNumber(number + 1)}>+</button>
-        <button onClick={() => setNumber(0)} style={{ marginLeft: "10px" }}>
+        <h4>Number: {allData.count}</h4>
+        <button
+          onClick={() =>
+            dispatch({ type: "CHANGE_COUNT", numCount: allData.count - 1 })
+          }
+        >
+          -
+        </button>
+        <button
+          onClick={() =>
+            dispatch({ type: "CHANGE_COUNT", numCount: allData.count + 1 })
+          }
+        >
+          +
+        </button>
+        <button
+          onClick={() => dispatch({ type: "CHANGE_COUNT", numCount: 0 })}
+          style={{ marginLeft: "10px" }}
+        >
           Reset
         </button>
       </div>
 
+
       {/* Change Age */}
       <div>
-        <h4>My Age Is {age}</h4>
-        <button onClick={() => setAge(21)}>Change Age</button>
+        <h4>My Age Is {allData.age}</h4>
+        <button onClick={() => dispatch({ type: "CHANGE_AGE", newAge: 21 })}>
+          Change Age
+        </button>
       </div>
     </div>
   );
